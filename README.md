@@ -25,3 +25,14 @@ Issues will be used by the instructor to communicate comments about your work, i
 Issues are **not used for communicating grades**. Grades and other formal course communication are provided during classes or by email.
 
 Do not create Pull Requests to the original repository unless explicitly requested by the instructor.
+
+### AI-assisted solutions
+
+If you use AI tools to help prepare your solution, make sure that the final answer includes the following elements:
+
+1. **Problem Statement**
+2. **Theoretical Background and Concepts**
+3. **Detailed Step-by-Step Solution**
+4. **Verification and Consistency Checks**
+
+The final solution should be complete, understandable, and written in a form that clearly demonstrates the reasoning used to solve the problem.
