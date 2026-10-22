@@ -1,42 +1,54 @@
+# Exercise 11
+
+## Question
+
+Let
+
+$$
+A = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}, \qquad B = \begin{pmatrix} a & b \\ c & d \end{pmatrix}
+$$
+
+Find all matrices $B$ that commute with $A$, that is, all $B$ with $AB = BA$.
+
 ## Solution
 
-Compute both products:
+### Method
 
-```math
-AB=\begin{pmatrix}1&1\\0&1\end{pmatrix}\begin{pmatrix}a&b\\c&d\end{pmatrix}
-=\begin{pmatrix}a+c&b+d\\c&d\end{pmatrix}
-```
+We compute $AB$ and $BA$ by pairing rows with columns. Two matrices are equal exactly when all corresponding entries are equal, so we set each entry of $AB$ equal to the matching entry of $BA$ and solve for $a, b, c, d$.
 
-```math
-BA=\begin{pmatrix}a&b\\c&d\end{pmatrix}\begin{pmatrix}1&1\\0&1\end{pmatrix}
-=\begin{pmatrix}a&a+b\\c&c+d\end{pmatrix}
-```
+### The two products
 
-### Conditions for $`AB=BA`$
+$$
+AB = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+= \begin{pmatrix} a + c & b + d \\ c & d \end{pmatrix}
+$$
 
-Compare the entries:
+For example, $(AB)_{11} = 1\cdot a + 1\cdot c = a + c$.
 
-| Entry | $`AB`$ | $`BA`$ | Condition |
-|:---:|:---:|:---:|:---:|
-| $`(1,1)`$ | $`a+c`$ | $`a`$ | $`c=0`$ |
-| $`(1,2)`$ | $`b+d`$ | $`a+b`$ | $`d=a`$ |
-| $`(2,1)`$ | $`c`$ | $`c`$ | always true |
-| $`(2,2)`$ | $`d`$ | $`c+d`$ | $`c=0`$ |
+$$
+BA = \begin{pmatrix} a & b \\ c & d \end{pmatrix}\begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}
+= \begin{pmatrix} a & a + b \\ c & c + d \end{pmatrix}
+$$
 
-Therefore
+For example, $(BA)_{12} = a\cdot 1 + b\cdot 1 = a + b$.
 
-```math
-AB=BA \iff c=0 \ \text{ and } \ d=a
-```
+### Comparing entries
 
-while $`a`$ and $`b`$ are arbitrary.
+| Entry | $AB$ | $BA$ | Condition |
+|:-----:|:----:|:----:|:---------:|
+| (1,1) | $a + c$ | $a$ | $c = 0$ |
+| (1,2) | $b + d$ | $a + b$ | $d = a$ |
+| (2,1) | $c$ | $c$ | none |
+| (2,2) | $d$ | $c + d$ | $c = 0$ |
 
-### General form of $`B`$
+From the (1,1) entry, $a + c = a$ gives $c = 0$. From the (1,2) entry, $b + d = a + b$ gives $d = a$. The other two entries give no new condition or repeat $c = 0$.
 
-```math
-B=\begin{pmatrix}a&b\\0&a\end{pmatrix}
-=a\begin{pmatrix}1&0\\0&1\end{pmatrix}+b\begin{pmatrix}0&1\\0&0\end{pmatrix}
-=aI+bN,\qquad a,b\in\mathbb{R}
-```
+### Answer
 
-where $`N=\begin{pmatrix}0&1\\0&0\end{pmatrix}`$. Note that $`A=I+N`$,
+The parameters $a$ and $b$ are arbitrary, and
+
+$$
+B = \begin{pmatrix} a & b \\ 0 & a \end{pmatrix}
+$$
+
+These are exactly the matrices commuting with $A$.
