@@ -1,64 +1,108 @@
+# Exercise 9. Order of Transformations: Scaling and Rotation
+
+## Question
+
+Let
+
+$$
+S = \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix}, \qquad R = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}
+$$
+
+The matrix $S$ describes nonuniform scaling, while $R$ describes a $90^\circ$ counterclockwise rotation. For
+
+$$
+x = \begin{pmatrix} 1 \\ 2 \end{pmatrix}
+$$
+
+compute $RSx$ and $SRx$. Compare the results and explain geometrically why the order of these transformations matters.
+
 ## Solution
 
-In a product of matrices, the rightmost matrix acts first. So $`RSx`$ means "scale, then rotate", and $`SRx`$ means "rotate, then scale".
+### Method
 
-### Computing $`RSx`$ (scale first, then rotate)
+A product such as $RSx$ is evaluated from the right: first $Sx$, then $R$ is applied to that result. Each entry of a matrix-vector product is a row of the matrix paired with the vector: multiply corresponding entries and add.
 
-```math
-Sx=\begin{pmatrix}2&0\\0&1\end{pmatrix}\begin{pmatrix}1\\2\end{pmatrix}=\begin{pmatrix}2\\2\end{pmatrix}
-```
+### Computing RSx (scale first, then rotate)
 
-```math
-R(Sx)=\begin{pmatrix}0&-1\\1&0\end{pmatrix}\begin{pmatrix}2\\2\end{pmatrix}=\begin{pmatrix}-2\\2\end{pmatrix}
-```
+First apply $S$ to $x$:
 
-### Computing $`SRx`$ (rotate first, then scale)
+$$
+Sx = \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix}\begin{pmatrix} 1 \\ 2 \end{pmatrix}
+= \begin{pmatrix} 2\cdot 1 + 0\cdot 2 \\ 0\cdot 1 + 1\cdot 2 \end{pmatrix}
+= \begin{pmatrix} 2 \\ 2 \end{pmatrix}
+$$
 
-```math
-Rx=\begin{pmatrix}0&-1\\1&0\end{pmatrix}\begin{pmatrix}1\\2\end{pmatrix}=\begin{pmatrix}-2\\1\end{pmatrix}
-```
+Then apply $R$ to $Sx$:
 
-```math
-S(Rx)=\begin{pmatrix}2&0\\0&1\end{pmatrix}\begin{pmatrix}-2\\1\end{pmatrix}=\begin{pmatrix}-4\\1\end{pmatrix}
-```
+$$
+R(Sx) = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}\begin{pmatrix} 2 \\ 2 \end{pmatrix}
+= \begin{pmatrix} 0\cdot 2 + (-1)\cdot 2 \\ 1\cdot 2 + 0\cdot 2 \end{pmatrix}
+= \begin{pmatrix} -2 \\ 2 \end{pmatrix}
+$$
 
-### Check with the product matrices
+### Computing SRx (rotate first, then scale)
 
-```math
-RS=\begin{pmatrix}0&-1\\2&0\end{pmatrix},\qquad
-SR=\begin{pmatrix}0&-2\\1&0\end{pmatrix}
-```
+First apply $R$ to $x$:
 
-```math
-RSx=\begin{pmatrix}-2\\2\end{pmatrix},\qquad
-SRx=\begin{pmatrix}-4\\1\end{pmatrix}
-```
+$$
+Rx = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}\begin{pmatrix} 1 \\ 2 \end{pmatrix}
+= \begin{pmatrix} 0\cdot 1 + (-1)\cdot 2 \\ 1\cdot 1 + 0\cdot 2 \end{pmatrix}
+= \begin{pmatrix} -2 \\ 1 \end{pmatrix}
+$$
 
-## Comparison
+Then apply $S$ to $Rx$:
 
-| Order | Meaning | Result | Length |
-|:---:|:---:|:---:|:---:|
-| $`RSx`$ | scale, then rotate | $`(-2,\ 2)`$ | $`\sqrt{8}`$ |
-| $`SRx`$ | rotate, then scale | $`(-4,\ 1)`$ | $`\sqrt{17}`$ |
+$$
+S(Rx) = \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix}\begin{pmatrix} -2 \\ 1 \end{pmatrix}
+= \begin{pmatrix} 2\cdot(-2) + 0\cdot 1 \\ 0\cdot(-2) + 1\cdot 1 \end{pmatrix}
+= \begin{pmatrix} -4 \\ 1 \end{pmatrix}
+$$
 
-```math
-RSx=\begin{pmatrix}-2\\2\end{pmatrix}\neq\begin{pmatrix}-4\\1\end{pmatrix}=SRx
-```
+### Comparison
 
-The two results differ in both direction and length, because $`RS\neq SR`$: the matrices do not commute.
+$$
+RSx = \begin{pmatrix} -2 \\ 2 \end{pmatrix} \neq \begin{pmatrix} -4 \\ 1 \end{pmatrix} = SRx
+$$
 
-## Geometric explanation
+The two results are different vectors. They also have different lengths:
 
-$`S`$ stretches only the $`x`$-direction (by a factor of 2) and leaves the $`y`$-direction unchanged, so it treats the two axes differently. $`R`$ turns every vector by $`90^\circ`$, so it sends the $`x`$-axis to the $`y`$-axis.
+$$
+\|RSx\| = \sqrt{(-2)^2 + 2^2} = \sqrt{8}, \qquad \|SRx\| = \sqrt{(-4)^2 + 1^2} = \sqrt{17}
+$$
 
-- **$`RSx`$:** The plane is first stretched horizontally, and then the stretched picture is rotated. The long direction ends up **vertical**. The unit circle becomes an ellipse whose long axis lies along the $`y`$-axis.
-- **$`SRx`$:** The plane is first rotated, which leaves the unit circle a circle, and then stretched horizontally. The unit circle becomes an ellipse whose long axis lies along the $`x`$-axis.
+The original vector has length $\sqrt{5}$.
 
-| Vector | $`RS`$ | $`SR`$ |
-|:---:|:---:|:---:|
-| $`e_1=(1,0)`$ | $`(0,\ 2)`$ | $`(0,\ 1)`$ |
-| $`e_2=(0,1)`$ | $`(-1,\ 0)`$ | $`(-2,\ 0)`$ |
+### Geometric explanation
 
-In $`RS`$, the stretch hits the $`x`$-direction before the rotation moves it to the vertical. In $`SR`$, the rotation first moves $`e_2`$ onto the $`x`$-axis, where $`S`$ then doubles it.
+The matrix $S$ stretches only the horizontal direction (by a factor $2$) and leaves the vertical direction alone. The matrix $R$ turns every vector by $90^\circ$ but does not change lengths. The order matters because rotation changes which direction of the vector is the one being stretched.
 
-Rotation and scaling commute only when the scaling is uniform ($`S=cI`$), because then no direction is treated differently from another.
+- **Scale first, then rotate ($RSx$).** The vector $x = (1, 2)$ has horizontal part $1$. Scaling doubles it, giving $(2, 2)$. Rotation then turns this vector without changing its length, so $\|RSx\| = \sqrt{8}$.
+- **Rotate first, then scale ($SRx$).** The rotation sends $(1, 2)$ to $(-2, 1)$. The old vertical part $2$ now lies along the horizontal direction, which is exactly the direction that $S$ stretches. The larger part of the vector is doubled, giving $(-4, 1)$ and the longer length $\sqrt{17}$.
+
+So in one order the stretch acts on the small horizontal part $1$, and in the other order it acts on the larger part $2$. In general the two products of matrices are
+
+$$
+RS = \begin{pmatrix} 0 & -1 \\ 2 & 0 \end{pmatrix}, \qquad SR = \begin{pmatrix} 0 & -2 \\ 1 & 0 \end{pmatrix}
+$$
+
+which are different matrices.
+
+### Remark on when the order does not matter
+
+For a diagonal scaling $D = \operatorname{diag}(s, t)$ and the given $90^\circ$ rotation $R$,
+
+$$
+RD = \begin{pmatrix} 0 & -t \\ s & 0 \end{pmatrix}, \qquad DR = \begin{pmatrix} 0 & -s \\ t & 0 \end{pmatrix}
+$$
+
+so $RD = DR$ exactly when $s = t$. Hence, for this $90^\circ$ rotation, a diagonal scaling commutes with it only when its two scale factors agree, that is, when the scaling is uniform.
+
+This restriction is specific to this rotation. It is not true for every rotation: a $180^\circ$ rotation equals $-I$, which commutes with every matrix, including nonuniform scalings.
+
+### Conclusion
+
+$$
+RSx = \begin{pmatrix} -2 \\ 2 \end{pmatrix}, \qquad SRx = \begin{pmatrix} -4 \\ 1 \end{pmatrix}
+$$
+
+The results differ, so the order of the scaling and the rotation matters.
