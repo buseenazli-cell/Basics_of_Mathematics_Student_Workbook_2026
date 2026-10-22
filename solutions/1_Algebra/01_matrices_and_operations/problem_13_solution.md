@@ -1,83 +1,55 @@
+# Exercise 13
+
+## Question
+
+Let
+
+$$
+F = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}
+$$
+
+Compute $F^2, F^3, F^4, F^5$, observe the pattern, and explain how it is related to the Fibonacci numbers $1, 1, 2, 3, 5, 8, \dots$
+
 ## Solution
 
-### Computing $`F^2`$, $`F^3`$, $`F^4`$, $`F^5`$
+### Computing F squared
 
-```math
-F^2=\begin{pmatrix}1&1\\1&0\end{pmatrix}\begin{pmatrix}1&1\\1&0\end{pmatrix}
-=\begin{pmatrix}2&1\\1&1\end{pmatrix}
-```
+Each entry is a row of the left factor times a column of the right factor:
 
-```math
-F^3=F^2F=\begin{pmatrix}2&1\\1&1\end{pmatrix}\begin{pmatrix}1&1\\1&0\end{pmatrix}
-=\begin{pmatrix}3&2\\2&1\end{pmatrix}
-```
+$$
+F^2 = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}
+= \begin{pmatrix} 1\cdot 1 + 1\cdot 1 & 1\cdot 1 + 1\cdot 0 \\ 1\cdot 1 + 0\cdot 1 & 1\cdot 1 + 0\cdot 0 \end{pmatrix}
+= \begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix}
+$$
 
-```math
-F^4=F^3F=\begin{pmatrix}3&2\\2&1\end{pmatrix}\begin{pmatrix}1&1\\1&0\end{pmatrix}
-=\begin{pmatrix}5&3\\3&2\end{pmatrix}
-```
+### A reusable update rule
 
-```math
-F^5=F^4F=\begin{pmatrix}5&3\\3&2\end{pmatrix}\begin{pmatrix}1&1\\1&0\end{pmatrix}
-=\begin{pmatrix}8&5\\5&3\end{pmatrix}
-```
+To get the next power we multiply by $F$ on the right. A row $(u, v)$ becomes
 
-### Comparison with the Fibonacci sequence
+$$
+(u, v)\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix} = (u\cdot 1 + v\cdot 1,\; u\cdot 1 + v\cdot 0) = (u + v,\; u)
+$$
 
-Let $`F_0=0,\ F_1=1,\ F_2=1,\ F_3=2,\ F_4=3,\ F_5=5,\ F_6=8,\ \dots`$
+So the new first entry is the sum of the old two, and the new second entry is the old first entry. For example, going from $F^2$ to $F^3$:
 
-| Power | Matrix | In terms of Fibonacci numbers |
-|:---:|:---:|:---:|
-| $`F^1`$ | $`\begin{pmatrix}1&1\\1&0\end{pmatrix}`$ | $`\begin{pmatrix}F_2&F_1\\F_1&F_0\end{pmatrix}`$ |
-| $`F^2`$ | $`\begin{pmatrix}2&1\\1&1\end{pmatrix}`$ | $`\begin{pmatrix}F_3&F_2\\F_2&F_1\end{pmatrix}`$ |
-| $`F^3`$ | $`\begin{pmatrix}3&2\\2&1\end{pmatrix}`$ | $`\begin{pmatrix}F_4&F_3\\F_3&F_2\end{pmatrix}`$ |
-| $`F^4`$ | $`\begin{pmatrix}5&3\\3&2\end{pmatrix}`$ | $`\begin{pmatrix}F_5&F_4\\F_4&F_3\end{pmatrix}`$ |
-| $`F^5`$ | $`\begin{pmatrix}8&5\\5&3\end{pmatrix}`$ | $`\begin{pmatrix}F_6&F_5\\F_5&F_4\end{pmatrix}`$ |
+$$
+(2, 1) \mapsto (2+1,\, 2) = (3, 2), \qquad (1, 1) \mapsto (1+1,\, 1) = (2, 1)
+$$
 
-The entries of every power are consecutive Fibonacci numbers. The observed pattern is
+### The remaining powers
 
-```math
-F^n=\begin{pmatrix}F_{n+1}&F_n\\F_n&F_{n-1}\end{pmatrix}\qquad (n\ge 1)
-```
+$$
+F^3 = \begin{pmatrix} 3 & 2 \\ 2 & 1 \end{pmatrix}, \qquad
+F^4 = \begin{pmatrix} 5 & 3 \\ 3 & 2 \end{pmatrix}, \qquad
+F^5 = \begin{pmatrix} 8 & 5 \\ 5 & 3 \end{pmatrix}
+$$
 
-The off-diagonal entries equal $`F_n`$, the top-left entry is $`F_{n+1}`$, and the bottom-right entry is $`F_{n-1}`$.
+### Pattern
 
-### Multiplying a vector by $`F`$
+Every power contains consecutive Fibonacci numbers:
 
-```math
-F\begin{pmatrix}a\\b\end{pmatrix}
-=\begin{pmatrix}1&1\\1&0\end{pmatrix}\begin{pmatrix}a\\b\end{pmatrix}
-=\begin{pmatrix}a+b\\a\end{pmatrix}
-```
+$$
+F^n = \begin{pmatrix} f_{n+1} & f_n \\ f_n & f_{n-1} \end{pmatrix}
+$$
 
-### Why this is one recurrence step
-
-Take two consecutive Fibonacci numbers as the vector $`\begin{pmatrix}F_{k+1}\\F_k\end{pmatrix}`$, that is $`a=F_{k+1}`$ and $`b=F_k`$. Then
-
-```math
-F\begin{pmatrix}F_{k+1}\\F_k\end{pmatrix}
-=\begin{pmatrix}F_{k+1}+F_k\\F_{k+1}\end{pmatrix}
-=\begin{pmatrix}F_{k+2}\\F_{k+1}\end{pmatrix}
-```
-
-- **First row** $`(1,\ 1)`$: creates the sum of the two consecutive terms, $`a+b=F_{k+1}+F_k=F_{k+2}`$. This is the new term.
-- **Second row** $`(1,\ 0)`$: keeps the first term, $`a=F_{k+1}`$, and discards $`b`$. This is the term that must be remembered for the next step.
-
-So the new pair is again two consecutive terms, and the step can be repeated. Starting from $`\begin{pmatrix}F_1\\F_0\end{pmatrix}=\begin{pmatrix}1\\0\end{pmatrix}`$:
-
-```math
-F^n\begin{pmatrix}1\\0\end{pmatrix}=\begin{pmatrix}F_{n+1}\\F_n\end{pmatrix}
-```
-
-This explains the matrix powers above: $`F^n`$ applies the recurrence step $`n`$ times, and its first column is $`\begin{pmatrix}F_{n+1}\\F_n\end{pmatrix}`$.
-
-### Check by induction
-
-If $`F^n=\begin{pmatrix}F_{n+1}&F_n\\F_n&F_{n-1}\end{pmatrix}`$, then
-
-```math
-F^{n+1}=F^nF=\begin{pmatrix}F_{n+1}+F_n&F_{n+1}\\F_n+F_{n-1}&F_n\end{pmatrix}
-=\begin{pmatrix}F_{n+2}&F_{n+1}\\F_{n+1}&F_n\end{pmatrix}
-```
-
-which is the formula for $`n+1`$.
+where $f_1 = f_2 = 1$ and $f_{k+1} = f_k + f_{k-1}$. The update rule above is exactly this recurrence: each new row is the sum of the two previous Fibonacci numbers followed by the larger of the two.
