@@ -1,51 +1,93 @@
-# Exercise 2
+## Exercise 2 — Determinant of a 3×3 Matrix
 
-## Problem Statement
+### Problem Statement
 
-For 
+Given the matrix:
 
-$$A=\begin{pmatrix}1&2\\-1&3\end{pmatrix},\qquad B=\begin{pmatrix}4&-2\\0&5\end{pmatrix}$$
+\[
+A =
+\begin{pmatrix}
+1 & 2 & -1 \\
+0 & 3 & 4 \\
+2 & 1 & 5
+\end{pmatrix}
+\]
 
-compute $A+B$, $A-B$, and $3A-2B$. Explain why matrix addition is possible only for matrices of the same size.
+Calculate the determinant of matrix \(A\) using **Sarrus' Rule**. Verify your result using the **cofactor expansion method**.
 
----
+### Solution
 
-## Solution
+**1. Using Sarrus' Rule**
 
-### 1. Computation of $A+B$
+Repeat the first two columns:
 
-Matrix addition is performed entrywise by adding corresponding elements of $A$ and $B$:
+\[
+\begin{vmatrix}
+1 & 2 & -1 & 1 & 2\\
+0 & 3 & 4 & 0 & 3\\
+2 & 1 & 5 & 2 & 1
+\end{vmatrix}
+\]
 
-$$A+B = \begin{pmatrix}1&2\\-1&3\end{pmatrix} + \begin{pmatrix}4&-2\\0&5\end{pmatrix} = \begin{pmatrix} 1+4 & 2+(-2) \\ -1+0 & 3+5 \end{pmatrix} = \begin{pmatrix}5&0\\-1&8\end{pmatrix}$$
+Sum of the downward diagonals:
 
----
+\[
+(1 \cdot 3 \cdot 5) +
+(2 \cdot 4 \cdot 2) +
+(-1 \cdot 0 \cdot 1)
+\]
 
-### 2. Computation of $A-B$
+\[
+=15+16+0=31
+\]
 
-Matrix subtraction is performed entrywise by subtracting corresponding elements of $B$ from $A$:
+Sum of the upward diagonals:
 
-$$A-B = \begin{pmatrix}1&2\\-1&3\end{pmatrix} - \begin{pmatrix}4&-2\\0&5\end{pmatrix} = \begin{pmatrix} 1-4 & 2-(-2) \\ -1-0 & 3-5 \end{pmatrix} = \begin{pmatrix}-3&4\\-1&-2\end{pmatrix}$$
+\[
+(-1 \cdot 3 \cdot 2) +
+(1 \cdot 4 \cdot 1) +
+(2 \cdot 0 \cdot 5)
+\]
 
----
+\[
+=-6+4+0=-2
+\]
 
-### 3. Computation of $3A-2B$
+Therefore:
 
-First, scalar multiplication is applied to both matrices by multiplying every entry of $A$ by $3$ and every entry of $B$ by $2$:
+\[
+\det(A)=31-(-2)=33
+\]
 
-$$3A = 3\begin{pmatrix}1&2\\-1&3\end{pmatrix} = \begin{pmatrix}3&6\\-3&9\end{pmatrix}$$
+**2. Verification Using Cofactor Expansion**
 
-$$2B = 2\begin{pmatrix}4&-2\\0&5\end{pmatrix} = \begin{pmatrix}8&-4\\0&10\end{pmatrix}$$
+Expanding along the first row:
 
-Now, subtracting $2B$ from $3A$:
+\[
+\det(A)=
+1\begin{vmatrix}3&4\\1&5\end{vmatrix}
+-2\begin{vmatrix}0&4\\2&5\end{vmatrix}
++(-1)\begin{vmatrix}0&3\\2&1\end{vmatrix}
+\]
 
-$$3A-2B = \begin{pmatrix}3&6\\-3&9\end{pmatrix} - \begin{pmatrix}8&-4\\0&10\end{pmatrix} = \begin{pmatrix} 3-8 & 6-(-4) \\ -3-0 & 9-10 \end{pmatrix} = \begin{pmatrix}-5&10\\-3&-1\end{pmatrix}$$
+\[
+=1(15-4)-2(0-8)+(-1)(0-6)
+\]
 
----
+\[
+=11+16+6
+\]
 
-### 4. Why Matrix Addition Requires Same Sizes
+\[
+\boxed{\det(A)=33}
+\]
 
-Matrix addition is defined component-wise (or entry-by-entry), meaning the entry in row $i$ and column $j$ of the sum matrix $A+B$ is defined as:
+### Final Answer
 
-$$(A+B)_{ij} = a_{ij} + b_{ij}$$
+Both Sarrus' Rule and cofactor expansion produce the same result:
 
-For this operation to be mathematically defined, every entry $a_{ij}$ in $A$ must have a corresponding entry $b_{ij}$ in $B$. If two matrices have different dimensions (different numbers of rows or columns), there will be entries in one matrix with no corresponding entry in the other. Consequently, addition (and subtraction) is undefined unless both matrices have the exact same size ($m \times n$).
+\[
+\boxed{\det(A)=33}
+\]
+
+This confirms that the determinant calculation is correct.
