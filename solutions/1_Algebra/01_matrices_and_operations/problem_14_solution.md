@@ -1,49 +1,59 @@
-# Exercise 14
+# Exercise 13. A Recurrence Written in Matrix Form
 
-## Problem Statement
+## Question
 
-The matrix for a rotation through an angle $\theta$ is 
+Let
 
-$$R(\theta) = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}.$$
+$$F=\begin{pmatrix}1&1\\1&0\end{pmatrix}.$$
 
-Compute $R(\alpha)R(\beta)$ and, using the angle-sum formulas for sine and cosine, show that $R(\alpha)R(\beta) = R(\alpha+\beta)$. Explain the result geometrically.
+Compute $F^2$, $F^3$, $F^4$, and $F^5$. Compare the numbers obtained with the sequence
 
----
+$$0,1,1,2,3,5,8,\ldots$$
+
+and describe the relationship you observe. Then compute
+
+$$F\begin{pmatrix}a\\b\end{pmatrix}$$
+
+and explain how this multiplication performs one recurrence step: it creates the sum of two consecutive terms and keeps one of them for the next step.
 
 ## Solution
 
-To compute the product $R(\alpha)R(\beta)$, we multiply the two matrices row-by-column:
+**Computing $F^2$ (row by column).**
 
-$$R(\alpha)R(\beta) = \begin{pmatrix} \cos\alpha & -\sin\alpha \\ \sin\alpha & \cos\alpha \end{pmatrix} \begin{pmatrix} \cos\beta & -\sin\beta \\ \sin\beta & \cos\beta \end{pmatrix}$$
+$$F^2=\begin{pmatrix}1&1\\1&0\end{pmatrix}\begin{pmatrix}1&1\\1&0\end{pmatrix}
+=\begin{pmatrix}1\cdot1+1\cdot1&1\cdot1+1\cdot0\\1\cdot1+0\cdot1&1\cdot1+0\cdot0\end{pmatrix}
+=\begin{pmatrix}2&1\\1&1\end{pmatrix}.$$
 
-We calculate each entry of the resulting $2 \times 2$ matrix individually:
+**A reusable update for later powers.** To get $F^{k+1}=F^kF$, we multiply each row of $F^k$ on the right by $F$. A row $(u,v)$ becomes
 
-- **Entry $(1,1)$ (Row 1 $\times$ Column 1):**
-  $$(R(\alpha)R(\beta))_{11} = \cos\alpha\cos\beta + (-\sin\alpha)\sin\beta = \cos\alpha\cos\beta - \sin\alpha\sin\beta$$
+$$(u,\ v)\begin{pmatrix}1&1\\1&0\end{pmatrix}=(u\cdot1+v\cdot1,\ u\cdot1+v\cdot0)=(u+v,\ u).$$
 
-- **Entry $(1,2)$ (Row 1 $\times$ Column 2):**
-  $$(R(\alpha)R(\beta))_{12} = \cos\alpha(-\sin\beta) + (-\sin\alpha)\cos\beta = -(\sin\alpha\cos\beta + \cos\alpha\sin\beta)$$
+So the new row is (sum of the two entries, old first entry).
 
-- **Entry $(2,1)$ (Row 2 $\times$ Column 1):**
-  $$(R(\alpha)R(\beta))_{21} = \sin\alpha\cos\beta + \cos\alpha\sin\beta$$
+*Example transition $F^2\to F^3$.* The rows of $F^2$ are $(2,1)$ and $(1,1)$:
 
-- **Entry $(2,2)$ (Row 2 $\times$ Column 2):**
-  $$(R(\alpha)R(\beta))_{22} = \sin\alpha(-\sin\beta) + \cos\alpha\cos\beta = \cos\alpha\cos\beta - \sin\alpha\sin\beta$$
+$$(2,1)\mapsto(2+1,\ 2)=(3,2),\qquad (1,1)\mapsto(1+1,\ 1)=(2,1),$$
 
-Combining these entries into matrix form gives:
+hence $F^3=\begin{pmatrix}3&2\\2&1\end{pmatrix}$.
 
-$$R(\alpha)R(\beta) = \begin{pmatrix} \cos\alpha\cos\beta - \sin\alpha\sin\beta & -(\sin\alpha\cos\beta + \cos\alpha\sin\beta) \\ \sin\alpha\cos\beta + \cos\alpha\sin\beta & \cos\alpha\cos\beta - \sin\alpha\sin\beta \end{pmatrix}$$
+**The remaining powers (same update).**
 
-We now apply the trigonometric angle-sum identities:
-- $\cos(\alpha + \beta) = \cos\alpha\cos\beta - \sin\alpha\sin\beta$
-- $\sin(\alpha + \beta) = \sin\alpha\cos\beta + \cos\alpha\sin\beta$
+$$F^4:\ (3,2)\mapsto(5,3),\ (2,1)\mapsto(3,2)\ \Rightarrow\ F^4=\begin{pmatrix}5&3\\3&2\end{pmatrix},$$
 
-Substituting these formulas into the matrix entries yields:
+$$F^5:\ (5,3)\mapsto(8,5),\ (3,2)\mapsto(5,3)\ \Rightarrow\ F^5=\begin{pmatrix}8&5\\5&3\end{pmatrix}.$$
 
-$$R(\alpha)R(\beta) = \begin{pmatrix} \cos(\alpha+\beta) & -\sin(\alpha+\beta) \\ \sin(\alpha+\beta) & \cos(\alpha+\beta) \end{pmatrix} = R(\alpha+\beta)$$
+**Relationship with the Fibonacci numbers.** With $F_0=0,\ F_1=1,\ F_2=1,\ F_3=2,\ F_4=3,\ F_5=5,\ F_6=8,\dots$ the computed powers have the form
 
-### Geometric Explanation
+$$F^n=\begin{pmatrix}F_{n+1}&F_n\\F_n&F_{n-1}\end{pmatrix}.$$
 
-Geometrically, applying the matrix $R(\beta)$ to a vector rotates it counterclockwise about the origin by an angle $\beta$. Multiplying the result by $R(\alpha)$ then rotates the vector by a further angle $\alpha$ counterclockwise. 
+For instance, $F^5=\begin{pmatrix}8&5\\5&3\end{pmatrix}=\begin{pmatrix}F_6&F_5\\F_5&F_4\end{pmatrix}$, and $F^1=F=\begin{pmatrix}F_2&F_1\\F_1&F_0\end{pmatrix}$. The entries of the powers of $F$ are exactly consecutive Fibonacci numbers. (We observe this pattern from the computed cases; a separate proof of the general formula is not required here.)
 
-Thus, the product $R(\alpha)R(\beta)$ represents performing a rotation by $\beta$ followed by a rotation by $\alpha$. Since successive rotations in a two-dimensional plane add together, the combined effect is a single rotation through the total angle $\alpha + \beta$, which is precisely represented by the rotation matrix $R(\alpha + \beta)$.
+**One recurrence step.**
+
+$$F\begin{pmatrix}a\\b\end{pmatrix}=\begin{pmatrix}1\cdot a+1\cdot b\\1\cdot a+0\cdot b\end{pmatrix}=\begin{pmatrix}a+b\\a\end{pmatrix}.$$
+
+If $a$ and $b$ are two consecutive terms, $a=F_{k+1}$ and $b=F_k$, then the first component $a+b=F_{k+2}$ is the next term (the sum of the two consecutive terms), and the second component keeps $a=F_{k+1}$ for the next step. So
+
+$$F\begin{pmatrix}F_{k+1}\\F_k\end{pmatrix}=\begin{pmatrix}F_{k+2}\\F_{k+1}\end{pmatrix},$$
+
+and each multiplication by $F$ moves the pair of consecutive terms one position forward.
