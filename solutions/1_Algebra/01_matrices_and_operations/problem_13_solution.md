@@ -1,77 +1,59 @@
-# Exercise 13. Powers of the Fibonacci Matrix
+# Exercise 13. A Recurrence Written in Matrix Form
 
 ## Question
 
 Let
 
-$$
-F = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}
-$$
+$$F=\begin{pmatrix}1&1\\1&0\end{pmatrix}.$$
 
-Compute $F^2$, $F^3$, $F^4$ and $F^5$, observe the pattern, and explain how it is related to the Fibonacci numbers $1, 1, 2, 3, 5, 8, \dots$
+Compute $F^2$, $F^3$, $F^4$, and $F^5$. Compare the numbers obtained with the sequence
+
+$$0,1,1,2,3,5,8,\ldots$$
+
+and describe the relationship you observe. Then compute
+
+$$F\begin{pmatrix}a\\b\end{pmatrix}$$
+
+and explain how this multiplication performs one recurrence step: it creates the sum of two consecutive terms and keeps one of them for the next step.
 
 ## Solution
 
-### Method
+**Computing $F^2$ (row by column).**
 
-Each entry of a product is a row of the left factor paired with a column of the right factor: multiply corresponding entries and add. We multiply by $F$ on the right to get each next power.
+$$F^2=\begin{pmatrix}1&1\\1&0\end{pmatrix}\begin{pmatrix}1&1\\1&0\end{pmatrix}
+=\begin{pmatrix}1\cdot1+1\cdot1&1\cdot1+1\cdot0\\1\cdot1+0\cdot1&1\cdot1+0\cdot0\end{pmatrix}
+=\begin{pmatrix}2&1\\1&1\end{pmatrix}.$$
 
-### Computing F squared
+**A reusable update for later powers.** To get $F^{k+1}=F^kF$, we multiply each row of $F^k$ on the right by $F$. A row $(u,v)$ becomes
 
-$$
-F^2 = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}
-= \begin{pmatrix} 1\cdot 1 + 1\cdot 1 & 1\cdot 1 + 1\cdot 0 \\ 1\cdot 1 + 0\cdot 1 & 1\cdot 1 + 0\cdot 0 \end{pmatrix}
-= \begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix}
-$$
+$$(u,\ v)\begin{pmatrix}1&1\\1&0\end{pmatrix}=(u\cdot1+v\cdot1,\ u\cdot1+v\cdot0)=(u+v,\ u).$$
 
-### A reusable update rule
+So the new row is (sum of the two entries, old first entry).
 
-Multiplying a row $(u, v)$ on the right by $F$ gives
+*Example transition $F^2\to F^3$.* The rows of $F^2$ are $(2,1)$ and $(1,1)$:
 
-$$
-(u, v)\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix} = (u\cdot 1 + v\cdot 1,\; u\cdot 1 + v\cdot 0) = (u + v,\; u)
-$$
+$$(2,1)\mapsto(2+1,\ 2)=(3,2),\qquad (1,1)\mapsto(1+1,\ 1)=(2,1),$$
 
-So the new first entry is the sum of the old two entries, and the new second entry is the old first entry. Since $F^{n+1} = F^n F$, this rule is applied to each row of $F^n$.
+hence $F^3=\begin{pmatrix}3&2\\2&1\end{pmatrix}$.
 
-For example, going from $F^2$ to $F^3$:
+**The remaining powers (same update).**
 
-$$
-(2, 1) \mapsto (2 + 1,\; 2) = (3, 2), \qquad (1, 1) \mapsto (1 + 1,\; 1) = (2, 1)
-$$
+$$F^4:\ (3,2)\mapsto(5,3),\ (2,1)\mapsto(3,2)\ \Rightarrow\ F^4=\begin{pmatrix}5&3\\3&2\end{pmatrix},$$
 
-so
+$$F^5:\ (5,3)\mapsto(8,5),\ (3,2)\mapsto(5,3)\ \Rightarrow\ F^5=\begin{pmatrix}8&5\\5&3\end{pmatrix}.$$
 
-$$
-F^3 = \begin{pmatrix} 3 & 2 \\ 2 & 1 \end{pmatrix}
-$$
+**Relationship with the Fibonacci numbers.** With $F_0=0,\ F_1=1,\ F_2=1,\ F_3=2,\ F_4=3,\ F_5=5,\ F_6=8,\dots$ the computed powers have the form
 
-### The remaining powers
+$$F^n=\begin{pmatrix}F_{n+1}&F_n\\F_n&F_{n-1}\end{pmatrix}.$$
 
-Applying the same rule again:
+For instance, $F^5=\begin{pmatrix}8&5\\5&3\end{pmatrix}=\begin{pmatrix}F_6&F_5\\F_5&F_4\end{pmatrix}$, and $F^1=F=\begin{pmatrix}F_2&F_1\\F_1&F_0\end{pmatrix}$. The entries of the powers of $F$ are exactly consecutive Fibonacci numbers. (We observe this pattern from the computed cases; a separate proof of the general formula is not required here.)
 
-$$
-F^4 = \begin{pmatrix} 3+2 & 3 \\ 2+1 & 2 \end{pmatrix} = \begin{pmatrix} 5 & 3 \\ 3 & 2 \end{pmatrix}, \qquad
-F^5 = \begin{pmatrix} 5+3 & 5 \\ 3+2 & 3 \end{pmatrix} = \begin{pmatrix} 8 & 5 \\ 5 & 3 \end{pmatrix}
-$$
+**One recurrence step.**
 
-### Pattern and the Fibonacci numbers
+$$F\begin{pmatrix}a\\b\end{pmatrix}=\begin{pmatrix}1\cdot a+1\cdot b\\1\cdot a+0\cdot b\end{pmatrix}=\begin{pmatrix}a+b\\a\end{pmatrix}.$$
 
-Every power contains consecutive Fibonacci numbers:
+If $a$ and $b$ are two consecutive terms, $a=F_{k+1}$ and $b=F_k$, then the first component $a+b=F_{k+2}$ is the next term (the sum of the two consecutive terms), and the second component keeps $a=F_{k+1}$ for the next step. So
 
-$$
-F^n = \begin{pmatrix} f_{n+1} & f_n \\ f_n & f_{n-1} \end{pmatrix}
-$$
+$$F\begin{pmatrix}F_{k+1}\\F_k\end{pmatrix}=\begin{pmatrix}F_{k+2}\\F_{k+1}\end{pmatrix},$$
 
-where $f_0 = 0$, $f_1 = f_2 = 1$ and $f_{k+1} = f_k + f_{k-1}$.
-
-The update rule explains why. The first row of $F^n$ is $(f_{n+1}, f_n)$, and the rule turns it into $(f_{n+1} + f_n,\; f_{n+1}) = (f_{n+2}, f_{n+1})$, which is the first row of $F^{n+1}$. The addition in the rule is exactly the Fibonacci recurrence.
-
-### Conclusion
-
-$$
-F^2 = \begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix}, \quad
-F^3 = \begin{pmatrix} 3 & 2 \\ 2 & 1 \end{pmatrix}, \quad
-F^4 = \begin{pmatrix} 5 & 3 \\ 3 & 2 \end{pmatrix}, \quad
-F^5 = \begin{pmatrix} 8 & 5 \\ 5 & 3 \end{pmatrix}
-$$
+and each multiplication by $F$ moves the pair of consecutive terms one position forward.
